@@ -19,6 +19,7 @@ export const initModel = async () => {
 
 	const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {
 		modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+		modelUrl: process.env.MOVE_NET_MODEL,
 		minPoseScore: 0.53
 	});
 

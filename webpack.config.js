@@ -1,18 +1,24 @@
 import path from 'path';
 
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
+import packageJSON from './package.json' assert { type: "json" };
+
 const PUBLIC_DIR = path.resolve('public');
+const MODELS_DIR = path.resolve('models');
 // TODO: `docs` is used so the final build can be deployed to GitHub Pages
 const OUTPUT_DIR = path.resolve('docs');
+
+const PORT = 3000;
 
 export default {
 	entry: "index.js",
 	mode: process.env.NODE_ENV,
 	...(process.env.NODE_ENV === 'development' && {
 		devServer: {
-			port: 3000,
+			port: PORT,
 			https: true,
 			hot: true
 		},
@@ -27,14 +33,26 @@ export default {
 		path: OUTPUT_DIR
 	},
 	plugins: [
-		new HtmlWebpackPlugin(),
+		new HtmlWebpackPlugin({
+			title: packageJSON.description || packageJSON.name
+		}),
 		new CopyWebpackPlugin({
 			patterns: [
 				{
 					from: PUBLIC_DIR,
 					to: path.basename(PUBLIC_DIR)
+				},
+				{
+					from: MODELS_DIR,
+					to: path.basename(MODELS_DIR)
 				}
 			]
+		}),
+		new webpack.EnvironmentPlugin({
+			MOVE_NET_MODEL: {
+				'production': `/${packageJSON.name}/models/move-net/model.json`,
+				'development': '/models/move-net/model.json'
+			}[process.env.NODE_ENV]
 		})
 	]
 };

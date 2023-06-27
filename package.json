@@ -1,7 +1,7 @@
 {
 	"name": "pose-detection",
 	"version": "0.1.0",
-	"description": "MoveNet experiments",
+	"description": "MoveNet playground",
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
