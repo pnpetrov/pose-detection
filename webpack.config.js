@@ -4,7 +4,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const PUBLIC_DIR = path.resolve('public');
-const OUTPUT_DIR = path.resolve('build');
+// TODO: `docs` is used so the final build can be deployed to GitHub Pages
+const OUTPUT_DIR = path.resolve('docs');
 
 export default {
 	entry: "index.js",
