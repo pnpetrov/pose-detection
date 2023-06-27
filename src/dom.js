@@ -131,7 +131,7 @@ export const clearAlert = () => {
 	}
 }
 
-export const rest = seconds => {
+export const rest = ms => {
 	let el = document.getElementById('timer');
 	if (!el) {
 		el = document.createElement('div');
@@ -156,17 +156,17 @@ export const rest = seconds => {
 		document.body.appendChild(el);
 	}
 
-	el.innerHTML = `Rest<br /><strong>${seconds}<strong>`;
+	el.innerHTML = `Rest<br /><strong>${ms / 1000}<strong>`;
 
 	setInterval(() => {
-		seconds -= 1;
-		el.innerHTML = `Rest<br /><strong>${seconds}<strong>`;
+		ms -= 1000;
+		el.innerHTML = `Rest<br /><strong>${ms / 1000}<strong>`;
 	}, 1000);
 
 	return new Promise(resolve => setTimeout(() => {
 		el.remove();
 		resolve();
-	}, seconds * 1000))
+	}, ms))
 }
 
 export const initStatsContainer = title => {
@@ -182,7 +182,7 @@ export const initStatsContainer = title => {
 		el.style.display = 'flex';
 		el.style.flexDirection = 'column';
 		el.style.gridGap = '1vw';
-		el.style.fontSize = '2vw';
+		el.style.fontSize = '3vw';
 		el.style.backgroundColor = 'gray';
 		el.style.opacity = 0.5;
 		el.style.color = 'white';

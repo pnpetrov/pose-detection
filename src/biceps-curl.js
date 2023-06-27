@@ -36,7 +36,8 @@ const correctPoint = (p, origin, angle) => {
 const TOP_ANGLE = 50;
 const BOTTOM_ANGLE = 150;
 
-const REPETITION_THRESHOLD_INTERVAL = 1 * 1000;
+const REPETITION_THRESHOLD_INTERVAL = 5 * 1000;
+const REST_INTERVAL = 10 * 1000;
 
 export const initBicepsCurl = canvas => {
 	let set = 0;
@@ -55,7 +56,7 @@ export const initBicepsCurl = canvas => {
 		}
 
 		drawPattern(canvas, armPoints);
-		
+
 		const elbowAngle = toDegree(getAngle(...armPoints));
 		printAngle(elbowAngle);
 
@@ -73,7 +74,7 @@ export const initBicepsCurl = canvas => {
 					repetitions.push(0);
 
 					isInRest = true;
-					await rest(30);
+					await rest(REST_INTERVAL);
 					isInRest = false;
 				}, REPETITION_THRESHOLD_INTERVAL);
 			}
