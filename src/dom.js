@@ -93,6 +93,8 @@ export const initCamera = async (canvas, onFrame) => {
 
 	video.autoplay = true;
 	video.srcObject = stream;
+
+	await video.play();
 }
 
 export const alertMessage = message => {

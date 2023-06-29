@@ -32,7 +32,7 @@ const testLive = async () => {
 		ready();
 
 		const posture = await estimatePosture(detector, canvas);
-		
+
 		let alert = null;
 		if (!posture || posture.keypoints === 0) {
 			alert = alert || setTimeout(() => alertMessage('Bad posture!'), 100);
