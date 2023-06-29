@@ -33,13 +33,19 @@ const correctPoint = (p, origin, angle) => {
 	return { x, y: p.y };
 };
 
+const ARM_POINTS_COUNT = 3;
+
+const SCORE_THRESHOLD = 0.4;
+
 const TOP_ANGLE = 50;
 const BOTTOM_ANGLE = 150;
 
 const REPETITION_THRESHOLD_INTERVAL = 5 * 1000;
 const REST_INTERVAL = 10 * 1000;
 
-export const initBicepsCurl = canvas => {
+const isTrustful = (points, minScore = 0.5) => points.every(point => point.score >= minScore);
+
+export const initBicepsCurl = (canvas, { onBadPosture }) => {
 	let set = 0;
 	let repetitions = [0];
 	let isNewRepetition = false;
@@ -49,10 +55,14 @@ export const initBicepsCurl = canvas => {
 	let isInRest = false;
 
 	const onPostureChange = async posture => {
-		const armPoints = getRightArm(posture);
+		if (isInRest) {
+			return true;
+		}
 
-		if (armPoints.length === 0 || isInRest) {
-			return;
+		const armPoints = getRightArm(posture);
+		if (armPoints.length !== ARM_POINTS_COUNT || !isTrustful(armPoints, SCORE_THRESHOLD)) {
+			onBadPosture();
+			return false;
 		}
 
 		drawPattern(canvas, armPoints);
@@ -87,6 +97,8 @@ export const initBicepsCurl = canvas => {
 
 		printRepetitions(repetitions);
 		printProgressBar(BOTTOM_ANGLE, TOP_ANGLE, elbowAngle);
+
+		return true;
 	};
 
 	return onPostureChange;

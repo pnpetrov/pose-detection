@@ -18,6 +18,24 @@ const test = async () => {
 	printAngle(getAngle(...points));
 };
 
+const badPosture = (() => {
+	let timeout = null;
+
+	const alert = (delay = 200) => {
+		timeout = setTimeout(() => alertMessage('Bad posture!'), delay);
+	};
+
+	const clear = () => {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = null;
+		}
+		clearAlert()
+	};
+
+	return { alert, clear };
+})();
+
 const testLive = async () => {
 	initDocument();
 	const canvas = initCanvas();
@@ -26,24 +44,24 @@ const testLive = async () => {
 
 	initStatsContainer('Biceps curls (right arm)');
 
-	const onPostureChange = initBicepsCurl(canvas);
+	const onPostureChange = initBicepsCurl(canvas, { 
+		onBadPosture: badPosture.alert
+	});
 
 	await initCamera(canvas, async () => {
 		ready();
 
 		const posture = await estimatePosture(detector, canvas);
 
-		let alert = null;
 		if (!posture || posture.keypoints === 0) {
-			alert = alert || setTimeout(() => alertMessage('Bad posture!'), 100);
+			badPosture.alert();
 			return
 		}
 
-		clearTimeout(alert);
-		clearAlert();
-		alert = null;
-
-		onPostureChange(posture);
+		const successfullyProcessed = await onPostureChange(posture);
+		if (successfullyProcessed) {
+			badPosture.clear();
+		}
 	});
 }
 

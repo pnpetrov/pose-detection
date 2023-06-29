@@ -5,7 +5,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 
 import { loading } from './dom.js';
-import { toPoint } from './math.js';
+import { to3DPoint } from './math.js';
 
 const initTf = async () => {
 	loading('Initializing TensorFlow...');
@@ -39,7 +39,7 @@ export const estimatePosture = async (detector, source) => {
 
 const findByName = (keypoints = [], name) => keypoints.find(keypoint => keypoint.name === name);
 
-const getKeyPoints = (...names) => keypoints => names.map(name => findByName(keypoints, name)).filter(Boolean).map(toPoint);
+const getKeyPoints = (...names) => keypoints => names.map(name => findByName(keypoints, name)).filter(Boolean).map(to3DPoint);
 
 export const getShoulders = posture => getKeyPoints(
 	'left_shoulder',

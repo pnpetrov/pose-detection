@@ -1,4 +1,4 @@
-export const toPoint = ({ x = 0, y = 0, z = 0 } = {}) => ({ x, y, z});
+export const to3DPoint = ({ x = 0, y = 0, z = 0, ...others } = {}) => ({ x, y, z, ...others });
 
 export const dotProduct = (v1, v2) => v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 
