@@ -1,5 +1,5 @@
 import { initModel, estimatePosture } from './model.js';
-import { initDocument, initCanvas, initCamera, ready, initStatsContainer, printAngle, alertMessage, clearAlert } from './dom.js';
+import { initDocument, initCanvas, initCamera, ready, initStatsContainer, alertMessage, clearAlert, startRestInterval } from './dom.js';
 import { initBicepsCurl } from './biceps-curl.js';
 
 const badPosture = (() => {
@@ -20,6 +20,20 @@ const badPosture = (() => {
 	return { alert, clear };
 })();
 
+const restBetweenSets = (() => {
+	const rest = {
+		isResting: false
+	};
+
+	rest.start = async (restInterval = 10 * 1000) => {
+		rest.isResting = true;
+		await startRestInterval(restInterval);
+		rest.isResting = false;
+	};
+
+	return rest;
+})();
+
 const testLive = async () => {
 	initDocument();
 	const canvas = initCanvas();
@@ -29,10 +43,15 @@ const testLive = async () => {
 	initStatsContainer('Biceps curls (right arm)');
 
 	const onPostureChange = initBicepsCurl(canvas, { 
-		onBadPosture: badPosture.alert
+		onBadPosture: badPosture.alert,
+		onRestBetweenSets: restBetweenSets.start
 	});
 
 	await initCamera(canvas, async () => {
+		if (restBetweenSets.isResting) {
+			return;
+		}
+
 		const posture = await estimatePosture(detector, canvas);
 
 		if (!posture || posture.keypoints === 0) {

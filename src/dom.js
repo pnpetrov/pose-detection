@@ -133,7 +133,7 @@ export const clearAlert = () => {
 	}
 }
 
-export const rest = ms => {
+export const startRestInterval = ms => {
 	let el = document.getElementById('timer');
 	if (!el) {
 		el = document.createElement('div');

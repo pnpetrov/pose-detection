@@ -8,7 +8,7 @@ import packageJSON from './package.json' assert { type: "json" };
 
 // TODO: `docs` is used so the final build can be deployed to GitHub Pages
 const OUTPUT_DIR = path.resolve('docs');
-const MODELS_DIR = path.resolve('models');
+const MODELS_DIR = path.resolve('models');	
 
 const PORT = 3000;
 
