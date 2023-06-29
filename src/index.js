@@ -1,22 +1,6 @@
-import { initModel, estimatePosture, getRightArm } from './model.js';
-import { initDocument, initCanvas, initImage, initCamera, ready, initStatsContainer, printAngle, alertMessage, clearAlert } from './dom.js';
-import { drawPattern } from './draw.js';
+import { initModel, estimatePosture } from './model.js';
+import { initDocument, initCanvas, initCamera, ready, initStatsContainer, printAngle, alertMessage, clearAlert } from './dom.js';
 import { initBicepsCurl } from './biceps-curl.js';
-
-const test = async () => {
-	initDocument();
-	const canvas = initCanvas();
-	await initImage(canvas, './public/images/2.png');
-	
-	const detector = await initModel();
-
-	ready();
-
-	const posture = await estimatePosture(detector, canvas);
-	const points = getRightArm(posture);
-	drawPattern(canvas, points);
-	printAngle(getAngle(...points));
-};
 
 const badPosture = (() => {
 	let timeout = null;
@@ -49,8 +33,6 @@ const testLive = async () => {
 	});
 
 	await initCamera(canvas, async () => {
-		ready();
-
 		const posture = await estimatePosture(detector, canvas);
 
 		if (!posture || posture.keypoints === 0) {
@@ -63,7 +45,8 @@ const testLive = async () => {
 			badPosture.clear();
 		}
 	});
+
+	ready();
 }
 
-// test();
 testLive();

@@ -6,10 +6,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 import packageJSON from './package.json' assert { type: "json" };
 
-const PUBLIC_DIR = path.resolve('public');
-const MODELS_DIR = path.resolve('models');
 // TODO: `docs` is used so the final build can be deployed to GitHub Pages
 const OUTPUT_DIR = path.resolve('docs');
+const MODELS_DIR = path.resolve('models');
 
 const PORT = 3000;
 
@@ -38,10 +37,6 @@ export default {
 		}),
 		new CopyWebpackPlugin({
 			patterns: [
-				{
-					from: PUBLIC_DIR,
-					to: path.basename(PUBLIC_DIR)
-				},
 				{
 					from: MODELS_DIR,
 					to: path.basename(MODELS_DIR)
